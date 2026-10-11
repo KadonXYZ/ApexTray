@@ -8,6 +8,7 @@ namespace ApexTray.Core;
 public sealed record DeviceSnapshot
 {
     public bool DriverReady { get; init; }
+    public bool DownloadingDriver { get; init; }
     public string? DonglePath { get; init; }
     public bool MouseOnline { get; init; }
     public int? Battery { get; init; }
@@ -312,6 +313,12 @@ public sealed class ApexDevice : IAsyncDisposable
         {
             try
             {
+                if (!IotDriverHost.IsListening() && IotDriverHost.FindExecutable() is null)
+                {
+                    Update(s => s with { DownloadingDriver = true, Error = null });
+                    try { await IotDriverDownload.DownloadAsync(ct); }
+                    finally { Update(s => s with { DownloadingDriver = false }); }
+                }
                 await _host.EnsureRunningAsync(ct);
                 await _client.GetVersionAsync(ct);
                 Update(s => s with { DriverReady = true, Error = null });

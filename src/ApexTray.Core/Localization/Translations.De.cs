@@ -11,6 +11,7 @@ public static partial class Translations
         ["Buttons"] = "Tasten",
         ["Dock screen"] = "Dock-Display",
         ["Starting driver..."] = "Treiber wird gestartet ...",
+        ["Downloading the AJAZZ driver service..."] = "AJAZZ-Treiberdienst wird heruntergeladen ...",
         ["Driver unavailable: {0}"] = "Treiber nicht verfügbar: {0}",
         ["Dock not connected. Plug in the AJAZZ 2.4G dock."] = "Dock nicht verbunden. Schließe das AJAZZ-2,4G-Dock an.",
         ["Dock connected · mouse asleep (move it to wake)"] = "Dock verbunden · Maus schläft (zum Aufwecken bewegen)",

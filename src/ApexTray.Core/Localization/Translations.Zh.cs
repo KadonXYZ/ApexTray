@@ -11,6 +11,7 @@ public static partial class Translations
         ["Buttons"] = "按键",
         ["Dock screen"] = "底座屏幕",
         ["Starting driver..."] = "正在启动驱动...",
+        ["Downloading the AJAZZ driver service..."] = "正在下载 AJAZZ 驱动服务...",
         ["Driver unavailable: {0}"] = "驱动不可用：{0}",
         ["Dock not connected. Plug in the AJAZZ 2.4G dock."] = "底座未连接。请插入 AJAZZ 2.4G 底座。",
         ["Dock connected · mouse asleep (move it to wake)"] = "底座已连接 · 鼠标休眠中（移动鼠标唤醒）",

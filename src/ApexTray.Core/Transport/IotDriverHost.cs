@@ -36,7 +36,8 @@ public sealed class IotDriverHost : IDisposable
         }
 
         var bundled = Path.Combine(InstallFolder, "resources", "app", "iot_driver.exe");
-        return File.Exists(bundled) ? bundled : null;
+        if (File.Exists(bundled)) return bundled;
+        return File.Exists(IotDriverDownload.ExePath) ? IotDriverDownload.ExePath : null;
     }
 
     // The official AJAZZ app, used for the one job ApexTray hands back to it: flashing firmware.
@@ -55,7 +56,11 @@ public sealed class IotDriverHost : IDisposable
         if (_owned is { HasExited: false }) return;
 
         var exe = FindExecutable() ?? throw new FileNotFoundException(
-            "iot_driver.exe not found. It ships with the official AJAZZ Driver(R); keep that installed.");
+            "iot_driver.exe not found. Install the official AJAZZ Driver(R) or let ApexTray download it.");
+        // Without it iot_driver dies at load time with nothing more useful than an exit code.
+        if (!File.Exists(Path.Combine(Environment.SystemDirectory, "vcruntime140.dll")))
+            throw new FileNotFoundException(
+                "The Microsoft Visual C++ Redistributable (x64) is missing. Install it from https://aka.ms/vs/17/release/vc_redist.x64.exe");
 
         // iot_driver keeps its database next to itself, matching how the official app runs it.
         _owned = Process.Start(new ProcessStartInfo(exe)

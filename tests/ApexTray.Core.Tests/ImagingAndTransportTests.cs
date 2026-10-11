@@ -160,4 +160,24 @@ public class ImagingAndTransportTests
         var fields = ProtoReader.Parse(new ProtoWriter().UInt(6, 2147485500).ToArray());
         Assert.Equal(2147485500UL, fields[0].Value);
     }
+
+    [Fact]
+    public void IotVersion_FilePath()
+    {
+        const string live = """{"code":0,"err_message":null,"data":{"iot_driver_version_str":"v218","description":"","file_path":"iot_upgrade_file/win/iot_v218","sys_type":"win"}}""";
+        Assert.Equal("iot_upgrade_file/win/iot_v218", IotDriverDownload.ParseFilePath(live));
+        Assert.Null(IotDriverDownload.ParseFilePath("""{"code":1,"data":null}"""));
+        Assert.Null(IotDriverDownload.ParseFilePath("""{"code":0,"data":{"file_path":"../admin"}}"""));
+        Assert.Null(IotDriverDownload.ParseFilePath("""{"code":0,"data":{"file_path":"https://elsewhere.example/x"}}"""));
+    }
+
+    [Fact]
+    public void Signature_RequiresRongYuan()
+    {
+        // Validly signed, but by Microsoft.
+        Assert.False(IotDriverDownload.IsSignedByRongYuan(typeof(object).Assembly.Location));
+        Assert.False(IotDriverDownload.IsSignedByRongYuan(typeof(ImagingAndTransportTests).Assembly.Location));
+        if (IotDriverHost.FindExecutable() is { } installed)
+            Assert.True(IotDriverDownload.IsSignedByRongYuan(installed));
+    }
 }

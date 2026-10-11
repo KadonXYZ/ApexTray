@@ -98,6 +98,7 @@ public partial class MainWindow : Window
         _state = s;
         var (status, dot) = s switch
         {
+            { DownloadingDriver: true } => (Loc.T("Downloading the AJAZZ driver service..."), "MutedBrush"),
             { DriverReady: false } when s.Error != null => (Loc.F("Driver unavailable: {0}", s.Error), "Bad"),
             { DriverReady: false } => (Loc.T("Starting driver..."), "MutedBrush"),
             { DongleConnected: false } => (Loc.T("Dock not connected. Plug in the AJAZZ 2.4G dock."), "Bad"),
