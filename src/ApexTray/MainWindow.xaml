@@ -1,0 +1,382 @@
+<Window x:Class="ApexTray.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:ApexTray"
+        Title="ApexTray - AJ179 APEX" Width="800" Height="700" MinWidth="700" MinHeight="580"
+        Background="{DynamicResource Bg}" Foreground="{DynamicResource Text}" WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI" UseLayoutRounding="True">
+    <DockPanel Margin="20,16,20,12">
+
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Image x:Name="Logo" Width="46" Height="46" Margin="0,0,14,0" VerticalAlignment="Center" />
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="AJ179 APEX" FontSize="22" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                    <Ellipse x:Name="StatusDot" Width="9" Height="9" Fill="{DynamicResource MutedBrush}" VerticalAlignment="Center" />
+                    <TextBlock x:Name="StatusText" Style="{StaticResource Muted}" FontSize="13" Margin="7,0,0,0" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock x:Name="HeaderBattery" Text="-" FontSize="30" FontWeight="Bold" HorizontalAlignment="Right" />
+                <TextBlock Text="{l:T 'battery'}" Style="{StaticResource Muted}" HorizontalAlignment="Right" />
+            </StackPanel>
+        </Grid>
+
+        <TextBlock x:Name="FooterText" DockPanel.Dock="Bottom" Style="{StaticResource Muted}" Margin="2,8,0,0" TextTrimming="CharacterEllipsis" />
+
+        <TabControl Background="Transparent" BorderThickness="0" Padding="0,12,0,0">
+
+            <TabItem Header="{l:T 'Overview'}">
+                <ScrollViewer TextElement.Foreground="{DynamicResource Text}" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <TextBlock Text="{l:T 'BATTERY'}" Style="{StaticResource CardTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="BatteryBig" Text="-" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,18,0" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <Border x:Name="BatteryTrack" Height="12" CornerRadius="6" Background="{DynamicResource Line}">
+                                            <Border x:Name="BatteryBar" HorizontalAlignment="Left" Width="0" CornerRadius="6" Background="{DynamicResource Good}" />
+                                        </Border>
+                                        <TextBlock x:Name="BatteryNote" Style="{StaticResource Muted}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                                    <CheckBox x:Name="LowBatteryCheck" Content="{l:T 'Notify me when the battery drops to'}" FontSize="13"
+                                              VerticalAlignment="Center" Checked="LowBattery_Changed" Unchecked="LowBattery_Changed" />
+                                    <ComboBox x:Name="LowBatteryLevelBox" Width="80" Margin="10,0,0,0" VerticalAlignment="Center"
+                                              SelectionChanged="LowBattery_Changed" />
+                                    <Button Content="{l:T 'Test'}" Click="TestLowBattery_Click" Margin="10,0,0,0" Padding="10,4" FontSize="12" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <TextBlock Text="{l:T 'MOUSE'}" Style="{StaticResource CardTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="26" />
+                                        <RowDefinition Height="26" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{l:T 'Connection'}" Style="{StaticResource Muted}" VerticalAlignment="Center" />
+                                    <TextBlock x:Name="ConnText" Grid.Column="1" Text="-" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Row="1" Text="{l:T 'Polling rate'}" Style="{StaticResource Muted}" VerticalAlignment="Center" />
+                                    <TextBlock x:Name="RateText" Grid.Row="1" Grid.Column="1" Text="-" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Row="2" Text="{l:T 'Firmware'}" Style="{StaticResource Muted}" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,3">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="FirmwareText" Text="-" VerticalAlignment="Center" />
+                                            <Button x:Name="FirmwareButton" Content="{l:T 'Check for update'}" Click="CheckFirmware_Click"
+                                                    Margin="12,0,0,0" Padding="10,4" FontSize="12" />
+                                        </StackPanel>
+                                        <TextBlock x:Name="FirmwareNote" Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,6,0,0" Visibility="Collapsed" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Row="3" Text="{l:T 'DPI stages'}" Style="{StaticResource Muted}" Margin="0,8,0,0" />
+                                    <WrapPanel x:Name="DpiPanel" Grid.Row="3" Grid.Column="1" Margin="0,4,0,0" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <TextBlock Text="{l:T 'APP'}" Style="{StaticResource CardTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{l:T 'Appearance'}" Style="{StaticResource Muted}" VerticalAlignment="Center" />
+                                    <ComboBox x:Name="ThemeBox" Grid.Column="1" Margin="0,0,0,8" SelectionChanged="ThemeBox_SelectionChanged" />
+                                    <TextBlock Grid.Row="1" Text="{l:T 'Language'}" Style="{StaticResource Muted}" VerticalAlignment="Center" />
+                                    <ComboBox x:Name="LanguageBox" Grid.Row="1" Grid.Column="1" Margin="0,0,0,8" DisplayMemberPath="Name"
+                                              SelectionChanged="LanguageBox_SelectionChanged" />
+                                </Grid>
+                                <CheckBox x:Name="StartupCheck" Content="{l:T 'Start with Windows (in the tray)'}" FontSize="13" Margin="0,6,0,0"
+                                          Checked="StartupCheck_Changed" Unchecked="StartupCheck_Changed" />
+                                <TextBlock Style="{StaticResource Muted}" Margin="0,8,0,0" TextWrapping="Wrap"
+                                           Text="{l:T 'Closing this window keeps ApexTray running in the tray. Close the official AJAZZ app while using ApexTray; both talk to the same dock.'}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{l:T 'Performance'}">
+                <ScrollViewer TextElement.Foreground="{DynamicResource Text}" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="{l:T 'DPI STAGES'}" Style="{StaticResource CardTitle}" Margin="0" VerticalAlignment="Center" />
+                                    <TextBlock Style="{StaticResource Info}">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock Style="{StaticResource TipText}"
+                                                       Text="{l:T 'DPI sets how far the cursor travels for each inch the mouse moves; higher is faster. The DPI button on the mouse cycles through the stages that are switched on. Pick the stage the mouse uses right now with the round button. Values run from 50 to 42,000 in steps of 50 (steps of 100 above 21,000).'}" />
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                </StackPanel>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="56" />
+                                        <ColumnDefinition Width="110" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{l:T 'Active'}" Style="{StaticResource Muted}" />
+                                    <TextBlock Grid.Column="1" Text="{l:T 'Stage'}" Style="{StaticResource Muted}" />
+                                    <TextBlock Grid.Column="3" Text="DPI" Style="{StaticResource Muted}" />
+                                </Grid>
+                                <ItemsControl x:Name="DpiList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,3">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="56" />
+                                                    <ColumnDefinition Width="110" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="120" />
+                                                </Grid.ColumnDefinitions>
+                                                <RadioButton GroupName="ActiveDpi" IsChecked="{Binding IsActive}" IsEnabled="{Binding IsOn}"
+                                                             VerticalAlignment="Center" ToolTip="{Binding ActiveTip}" />
+                                                <CheckBox Grid.Column="1" Content="{Binding Label}" IsChecked="{Binding IsOn}" VerticalAlignment="Center" />
+                                                <Slider Grid.Column="2" Minimum="0" Maximum="1000" SmallChange="5" LargeChange="50"
+                                                        Value="{Binding SliderPosition}" IsEnabled="{Binding IsOn}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                                <TextBox Grid.Column="3" Text="{Binding ValueText, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsOn}"
+                                                         VerticalAlignment="Center" KeyDown="DpiText_KeyDown" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                    <Button x:Name="DpiApplyButton" Content="{l:T 'Apply DPI'}" Style="{StaticResource Primary}" Click="DpiApply_Click" />
+                                    <Button x:Name="DpiUndoButton" Content="{l:T 'Undo changes'}" Click="DpiUndo_Click" Margin="8,0,0,0" />
+                                    <Button x:Name="DpiDefaultsButton" Content="{l:T 'Restore defaults'}" Click="DpiDefaults_Click" Margin="8,0,0,0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="{l:T 'POLLING RATE'}" Style="{StaticResource CardTitle}" Margin="0" VerticalAlignment="Center" />
+                                    <TextBlock Style="{StaticResource Info}">
+                                        <TextBlock.ToolTip>
+                                            <TextBlock Style="{StaticResource TipText}"
+                                                       Text="{l:T 'How many times per second the mouse reports its position to the PC. Higher rates feel smoother and cut input delay slightly, but use more CPU and battery. 1000 Hz suits most people; 2000-8000 Hz mainly helps on high-refresh-rate monitors.'}" />
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                </StackPanel>
+                                <WrapPanel x:Name="RatePanel" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardBorder}">
+                            <StackPanel>
+                                <TextBlock Text="{l:T 'SENSOR'}" Style="{StaticResource CardTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Margin="0,4,0,10" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{l:T 'Silent height'}" Style="{StaticResource SettingName}" />
+                                            <TextBlock Style="{StaticResource Info}">
+                                                <TextBlock.ToolTip>
+                                                    <TextBlock Style="{StaticResource TipText}"
+                                                               Text="{l:T 'Lift-off distance: how high you can lift the mouse before the sensor stops tracking. Low stops tracking almost immediately, so the cursor does not drift when you lift and reposition the mouse (popular for gaming). High keeps tracking while the mouse is lifted slightly, which helps on thick or soft mouse pads.'}" />
+                                                </TextBlock.ToolTip>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Text="{l:T 'Lift-off distance'}" Style="{StaticResource Muted}" />
+                                    </StackPanel>
+                                    <WrapPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,4,0,4">
+                                        <RadioButton x:Name="LiftLow" Style="{StaticResource Chip}" GroupName="Lift" Content="{l:T 'Low'}" Click="Sensor_Click" />
+                                        <RadioButton x:Name="LiftMiddle" Style="{StaticResource Chip}" GroupName="Lift" Content="{l:T 'Middle'}" Click="Sensor_Click" />
+                                        <RadioButton x:Name="LiftHigh" Style="{StaticResource Chip}" GroupName="Lift" Content="{l:T 'High'}" Click="Sensor_Click" />
+                                    </WrapPanel>
+
+                                    <StackPanel Grid.Row="1" Margin="0,4,0,10" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{l:T 'Rectilinear correction'}" Style="{StaticResource SettingName}" />
+                                            <TextBlock Style="{StaticResource Info}">
+                                                <TextBlock.ToolTip>
+                                                    <TextBlock Style="{StaticResource TipText}"
+                                                               Text="{l:T 'Angle snapping: straightens slightly wobbly movements into perfectly horizontal or vertical lines. Handy for drawing and spreadsheets; most gamers leave it off because it changes your real hand movement.'}" />
+                                                </TextBlock.ToolTip>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Text="{l:T 'Angle snapping'}" Style="{StaticResource Muted}" />
+                                    </StackPanel>
+                                    <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,4,0,4">
+                                        <RadioButton x:Name="SnapOff" Style="{StaticResource Chip}" GroupName="Snap" Content="{l:T 'Off'}" Click="Sensor_Click" />
+                                        <RadioButton x:Name="SnapOn" Style="{StaticResource Chip}" GroupName="Snap" Content="{l:T 'On'}" Click="Sensor_Click" />
+                                    </WrapPanel>
+
+                                    <StackPanel Grid.Row="2" Margin="0,4,0,4" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{l:T 'Ripple correction'}" Style="{StaticResource SettingName}" />
+                                            <TextBlock Style="{StaticResource Info}">
+                                                <TextBlock.ToolTip>
+                                                    <TextBlock Style="{StaticResource TipText}"
+                                                               Text="{l:T 'Ripple control: smooths out small jitter in the sensor signal, which mostly shows up at very high DPI. It adds a tiny bit of delay, so leave it off unless the cursor shakes at high DPI.'}" />
+                                                </TextBlock.ToolTip>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Text="{l:T 'Ripple control'}" Style="{StaticResource Muted}" />
+                                    </StackPanel>
+                                    <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,4,0,4">
+                                        <RadioButton x:Name="RippleOff" Style="{StaticResource Chip}" GroupName="Ripple" Content="{l:T 'Off'}" Click="Sensor_Click" />
+                                        <RadioButton x:Name="RippleOn" Style="{StaticResource Chip}" GroupName="Ripple" Content="{l:T 'On'}" Click="Sensor_Click" />
+                                    </WrapPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{l:T 'Buttons'}">
+                <DockPanel TextElement.Foreground="{DynamicResource Text}">
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,4,0,0">
+                        <Button Content="{l:T 'Restore defaults'}" Click="ResetButtons_Click" x:Name="ResetButton" />
+                        <Button Content="{l:T 'Reload from mouse'}" Click="Reload_Click" Margin="8,0,0,0" x:Name="ReloadButton" />
+                    </StackPanel>
+                    <Border Style="{StaticResource CardBorder}" Padding="0">
+                        <DockPanel>
+                            <Grid DockPanel.Dock="Top" Margin="16,12,16,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="240" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{l:T 'BUTTON'}" Style="{StaticResource CardTitle}" />
+                                <TextBlock Grid.Column="1" Text="{l:T 'DOES'}" Style="{StaticResource CardTitle}" />
+                                <TextBlock Grid.Column="2" Text="{l:T 'CHANGE TO'}" Style="{StaticResource CardTitle}" />
+                            </Grid>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="ButtonList" Margin="16,0,16,8">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="170" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="240" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Current}" VerticalAlignment="Center" Foreground="{DynamicResource Accent}" Margin="0,0,12,0" TextTrimming="CharacterEllipsis" />
+                                                <Grid Grid.Column="2">
+                                                    <ComboBox ItemsSource="{Binding Choices}" DisplayMemberPath="Label" Tag="{Binding}"
+                                                              IsEnabled="{Binding Enabled}" SelectionChanged="ButtonChoice_SelectionChanged"
+                                                              VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+                                                    <!-- Selection is reset after every pick, so the box always shows this prompt. -->
+                                                    <TextBlock Text="{l:T 'Choose action...'}" Style="{StaticResource Muted}" FontSize="13" Margin="12,0,0,0"
+                                                               VerticalAlignment="Center" IsHitTestVisible="False" />
+                                                </Grid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Border>
+                </DockPanel>
+            </TabItem>
+
+            <TabItem Header="{l:T 'Dock screen'}">
+                <ScrollViewer TextElement.Foreground="{DynamicResource Text}" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Style="{StaticResource CardBorder}" Margin="0,0,12,12" VerticalAlignment="Top">
+                            <StackPanel>
+                                <TextBlock Text="{l:T 'PREVIEW (128 × 128)'}" Style="{StaticResource CardTitle}" />
+                                <Border x:Name="DropZone" Width="256" Height="256" Background="Black" CornerRadius="4" AllowDrop="True"
+                                        Drop="DropZone_Drop" DragOver="DropZone_DragOver" Cursor="Hand" MouseLeftButtonUp="DropZone_Click">
+                                    <Grid>
+                                        <Image x:Name="Preview" RenderOptions.BitmapScalingMode="NearestNeighbor" Stretch="Fill" />
+                                        <StackPanel x:Name="DropHint" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="{l:T 'Drop an image or GIF here'}" Foreground="#9AA0AA" HorizontalAlignment="Center" />
+                                            <TextBlock Text="{l:T 'or click to browse'}" Foreground="#9AA0AA" HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <TextBlock x:Name="ImageInfo" Style="{StaticResource Muted}" Margin="0,8,0,0" TextWrapping="Wrap" Width="256" />
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="1">
+                            <Border Style="{StaticResource CardBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="{l:T 'UPLOAD'}" Style="{StaticResource CardTitle}" />
+                                    <Button Content="{l:T 'Choose image...'}" Click="Browse_Click" HorizontalAlignment="Left" />
+
+                                    <TextBlock Text="{l:T 'Scaling'}" Style="{StaticResource Muted}" Margin="0,14,0,4" />
+                                    <WrapPanel>
+                                        <RadioButton x:Name="FillRadio" Style="{StaticResource Chip}" Content="{l:T 'Fill (crop to square)'}" IsChecked="True" Checked="Fit_Changed" />
+                                        <RadioButton x:Name="FitRadio" Style="{StaticResource Chip}" Content="{l:T 'Fit (black borders)'}" Checked="Fit_Changed" />
+                                    </WrapPanel>
+
+                                    <StackPanel x:Name="SlotPanel" Margin="0,10,0,0">
+                                        <TextBlock Text="{l:T 'Picture slot'}" Style="{StaticResource Muted}" Margin="0,0,0,4" />
+                                        <WrapPanel x:Name="SlotChips" />
+                                    </StackPanel>
+                                    <TextBlock x:Name="GifNote" Style="{StaticResource Muted}" Margin="0,14,0,0" TextWrapping="Wrap" Visibility="Collapsed"
+                                               Text="{l:T 'Animated GIFs replace the picture slideshow on the dock with the animation.'}" />
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                        <Button x:Name="UploadButton" Content="{l:T 'Upload to dock'}" Style="{StaticResource Primary}" Click="Upload_Click" IsEnabled="False" />
+                                        <Button x:Name="CancelUploadButton" Content="{l:T 'Cancel'}" Click="CancelUpload_Click" Margin="8,0,0,0" Visibility="Collapsed" />
+                                    </StackPanel>
+                                    <ProgressBar x:Name="UploadProgress" Height="6" Margin="0,12,0,0" Maximum="1" Visibility="Collapsed" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource CardBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="{l:T 'DOCK'}" Style="{StaticResource CardTitle}" />
+                                    <WrapPanel>
+                                        <Button Content="{l:T 'Sync clock'}" Click="SyncClock_Click" x:Name="ClockButton" Margin="0,0,8,8" />
+                                        <Button Content="{l:T 'Erase all dock pictures...'}" Style="{StaticResource Danger}" Click="Erase_Click" Margin="0,0,0,8" x:Name="EraseButton" />
+                                    </WrapPanel>
+                                    <TextBlock x:Name="DockVersionText" Style="{StaticResource Muted}" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
