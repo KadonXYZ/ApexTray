@@ -1,6 +1,14 @@
 # ApexTray
 
+[![Release](https://img.shields.io/github/v/release/KadonXYZ/ApexTray)](https://github.com/KadonXYZ/ApexTray/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/KadonXYZ/ApexTray/total)](https://github.com/KadonXYZ/ApexTray/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6?logo=windows)](#requirements)
+[![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![License](https://img.shields.io/github/license/KadonXYZ/ApexTray)](LICENSE)
+
 A small Windows tray app for the AJAZZ AJ179 APEX mouse and its 2.4G screen dock. It replaces the official AJAZZ Driver(R) window for everyday use.
+
+![ApexTray overview](docs/overview.png)
 
 ## Features
 
@@ -12,6 +20,10 @@ A small Windows tray app for the AJAZZ AJ179 APEX mouse and its 2.4G screen dock
 - Firmware check against the AJAZZ update server
 - Light and dark theme, English, German, French, Spanish and Chinese
 - Starts with Windows if you want it to
+
+| Performance | Buttons | Dock screen |
+| --- | --- | --- |
+| ![DPI stages and sensor settings](docs/performance.png) | ![Button remapping](docs/buttons.png) | ![Dock screen pictures](docs/dock.png) |
 
 ## Requirements
 
